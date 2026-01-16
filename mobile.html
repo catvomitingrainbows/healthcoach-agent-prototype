@@ -628,7 +628,7 @@
     </div>
     <div class="agent-content" id="agentContent">
       <div class="mode-tabs">
-        <button class="mode-tab" onclick="triggerAgent('diagnosis')">Diagnostic</button>
+        <button class="mode-tab" onclick="triggerAgent('diagnosis')">Diagnosis</button>
         <button class="mode-tab" onclick="triggerAgent('summary')">Summary</button>
       </div>
       <div class="agent-placeholder">
@@ -720,7 +720,7 @@
 
       agentContent.innerHTML = `
         <div class="mode-tabs">
-          <button class="mode-tab ${mode === 'diagnosis' ? 'active' : ''}" onclick="triggerAgent('diagnosis')">Diagnostic</button>
+          <button class="mode-tab ${mode === 'diagnosis' ? 'active' : ''}" onclick="triggerAgent('diagnosis')">Diagnosis</button>
           <button class="mode-tab ${mode === 'summary' ? 'active' : ''}" onclick="triggerAgent('summary')">Summary</button>
         </div>
         <div class="loading">
@@ -734,22 +734,22 @@
 
       setTimeout(() => {
         if (mode === 'diagnosis') {
-          showDiagnosticResponse();
+          showDiagnosisResponse();
         } else {
           showSummaryResponse();
         }
       }, 1200);
     }
 
-    function showDiagnosticResponse() {
+    function showDiagnosisResponse() {
       agentContent.innerHTML = `
         <div class="mode-tabs">
-          <button class="mode-tab active" onclick="triggerAgent('diagnosis')">Diagnostic</button>
+          <button class="mode-tab active" onclick="triggerAgent('diagnosis')">Diagnosis</button>
           <button class="mode-tab" onclick="triggerAgent('summary')">Summary</button>
         </div>
         <div class="agent-response">
           <div class="agent-response-header">
-            DIAGNOSTIC PROTOCOL: Lower Back Pain
+            DIAGNOSIS PROTOCOL: Lower Back Pain
           </div>
           <div class="agent-response-body">
             <h3>Assessment Checklist</h3>
@@ -805,7 +805,7 @@
     function showSummaryResponse() {
       agentContent.innerHTML = `
         <div class="mode-tabs">
-          <button class="mode-tab" onclick="triggerAgent('diagnosis')">Diagnostic</button>
+          <button class="mode-tab" onclick="triggerAgent('diagnosis')">Diagnosis</button>
           <button class="mode-tab active" onclick="triggerAgent('summary')">Summary</button>
         </div>
         <div class="agent-response">

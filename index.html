@@ -642,14 +642,14 @@
       // Simulate API delay
       setTimeout(() => {
         if (mode === 'diagnosis') {
-          showDiagnosticResponse();
+          showDiagnosisResponse();
         } else {
           showSummaryResponse();
         }
       }, 1500);
     }
 
-    function showDiagnosticResponse() {
+    function showDiagnosisResponse() {
       agentContent.innerHTML = `
         <div class="mode-buttons">
           <button class="mode-btn active" onclick="triggerAgent('diagnosis')">
@@ -661,7 +661,7 @@
         </div>
         <div class="agent-response">
           <div class="agent-response-header">
-            DIAGNOSTIC PROTOCOL: Lower Back Pain
+            DIAGNOSIS PROTOCOL: Lower Back Pain
           </div>
           <div class="agent-response-body">
             <h3>Assessment Checklist</h3>
