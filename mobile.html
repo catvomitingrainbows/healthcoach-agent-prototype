@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Health Coach @Agent - Mobile</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      height: 100vh;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: #1a73e8;
+      color: white;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      safe-area-inset-top: env(safe-area-inset-top);
+      padding-top: calc(12px + env(safe-area-inset-top, 0px));
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header h1 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .header-subtitle {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-top: 2px;
+    }
+
+    .agent-toggle {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .agent-toggle.active {
+      background: #7c3aed;
+    }
+
+    .agent-toggle-dot {
+      width: 8px;
+      height: 8px;
+      background: #4ade80;
+      border-radius: 50%;
+    }
+
+    /* Chat container */
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: white;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .message.patient {
+      background: #e3f2fd;
+      color: #1565c0;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+
+    .message.coach {
+      background: #1a73e8;
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      opacity: 0.7;
+    }
+
+    /* Chat input */
+    .chat-input-container {
+      padding: 12px;
+      padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+      border-top: 1px solid #e0e0e0;
+      background: #fafafa;
+      flex-shrink: 0;
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 4px;
+    }
+
+    .quick-action {
+      background: #f3e8ff;
+      border: 1px solid #e9d5ff;
+      color: #7c3aed;
+      padding: 8px 14px;
+      border-radius: 18px;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .quick-action:active {
+      background: #7c3aed;
+      color: white;
+    }
+
+    .chat-input-wrapper {
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid #ddd;
+      border-radius: 24px;
+      font-size: 16px;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .chat-input:focus {
+      border-color: #1a73e8;
+    }
+
+    .send-btn {
+      background: #1a73e8;
+      color: white;
+      border: none;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .send-btn:active {
+      background: #1557b0;
+    }
+
+    /* Agent panel overlay */
+    .agent-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+      z-index: 100;
+    }
+
+    .agent-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Agent panel (bottom sheet) */
+    .agent-panel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-radius: 20px 20px 0 0;
+      max-height: 85vh;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      z-index: 101;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .agent-panel.visible {
+      transform: translateY(0);
+    }
+
+    .agent-handle {
+      width: 40px;
+      height: 4px;
+      background: #ddd;
+      border-radius: 2px;
+      margin: 12px auto;
+      flex-shrink: 0;
+    }
+
+    .agent-header {
+      padding: 0 16px 16px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .agent-header-left h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #7c3aed;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .agent-header-left p {
+      font-size: 12px;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    .coach-only-badge {
+      background: #f3e8ff;
+      color: #7c3aed;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .close-btn {
+      background: #f0f0f0;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .agent-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Mode tabs */
+    .mode-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .mode-tab {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #e9d5ff;
+      background: white;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 13px;
+      color: #7c3aed;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .mode-tab:active,
+    .mode-tab.active {
+      background: #7c3aed;
+      color: white;
+      border-color: #7c3aed;
+    }
+
+    /* Agent response */
+    .agent-response {
+      background: #faf5ff;
+      border-radius: 16px;
+      overflow: hidden;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .agent-response-header {
+      background: #7c3aed;
+      color: white;
+      padding: 14px 16px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .agent-response-body {
+      padding: 16px;
+    }
+
+    .agent-response h3 {
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 12px;
+    }
+
+    /* Checklist */
+    .checklist {
+      list-style: none;
+      margin-bottom: 16px;
+    }
+
+    .checklist li {
+      padding: 12px 0;
+      border-bottom: 1px solid #e9d5ff;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .checklist li:last-child {
+      border-bottom: none;
+    }
+
+    .checkbox {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .checkbox.checked {
+      background: #7c3aed;
+      border-color: #7c3aed;
+    }
+
+    .checkbox.checked::after {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 3px;
+      width: 6px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    /* Info cards */
+    .info-card {
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .info-card h4 {
+      font-size: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .info-card.red-flags {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+    }
+
+    .info-card.red-flags h4 {
+      color: #dc2626;
+    }
+
+    .info-card.red-flags ul {
+      margin-left: 16px;
+      font-size: 13px;
+      color: #991b1b;
+    }
+
+    .info-card.red-flags li {
+      margin: 6px 0;
+    }
+
+    .info-card.patient-profile {
+      background: #eff6ff;
+    }
+
+    .info-card.patient-profile h4 {
+      color: #1e40af;
+    }
+
+    .info-card.patient-profile p {
+      font-size: 14px;
+      color: #1e3a8a;
+    }
+
+    .info-card.next-steps {
+      background: #fefce8;
+    }
+
+    .info-card.next-steps h4 {
+      color: #854d0e;
+    }
+
+    .info-card.next-steps ul {
+      margin-left: 16px;
+      font-size: 13px;
+      color: #713f12;
+    }
+
+    .info-card.next-steps li {
+      margin: 6px 0;
+    }
+
+    .info-card.sources {
+      background: #f0fdf4;
+    }
+
+    .info-card.sources h4 {
+      color: #166534;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 11px;
+    }
+
+    .source-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .source-tag {
+      background: #dcfce7;
+      color: #166534;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+    }
+
+    /* Considerations list */
+    .considerations ol {
+      margin-left: 20px;
+      font-size: 14px;
+    }
+
+    .considerations li {
+      margin: 10px 0;
+      color: #333;
+    }
+
+    .considerations .likelihood {
+      display: block;
+      font-size: 12px;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    /* Loading */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 40px;
+    }
+
+    .loading-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .loading-dots span {
+      width: 12px;
+      height: 12px;
+      background: #7c3aed;
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out;
+    }
+
+    .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+
+    /* Placeholder */
+    .agent-placeholder {
+      text-align: center;
+      padding: 40px 20px;
+      color: #888;
+    }
+
+    .agent-placeholder p {
+      margin: 8px 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1>Sarah M.</h1>
+      <span class="header-subtitle">Back Pain Program</span>
+    </div>
+    <button class="agent-toggle" id="agentToggle" onclick="toggleAgentPanel()">
+      <span class="agent-toggle-dot"></span>
+      @Agent
+    </button>
+  </div>
+
+  <!-- Chat -->
+  <div class="chat-container">
+    <div class="chat-messages" id="chatMessages">
+      <div class="message patient">
+        <div class="message-label">Patient</div>
+        Hi, I've been having this back pain for about 3 days now. It started after I was sitting at my desk for a long time.
+      </div>
+      <div class="message coach">
+        <div class="message-label">You</div>
+        Hi Sarah! I'm sorry to hear about your back pain. Can you tell me more about where exactly you feel the pain?
+      </div>
+      <div class="message patient">
+        <div class="message-label">Patient</div>
+        It's mostly in my lower back, on the right side. Sometimes it feels like it goes down into my hip area.
+      </div>
+      <div class="message coach">
+        <div class="message-label">You</div>
+        Thank you for that detail. Does the pain get worse when you're sitting or standing for long periods?
+      </div>
+      <div class="message patient">
+        <div class="message-label">Patient</div>
+        Yes, definitely worse when sitting. Standing and walking around actually helps a bit. Also, I noticed some tingling in my right leg yesterday.
+      </div>
+    </div>
+
+    <div class="chat-input-container">
+      <div class="quick-actions">
+        <button class="quick-action" onclick="triggerAgent('diagnostic')">@agent diagnostic</button>
+        <button class="quick-action" onclick="triggerAgent('summary')">@agent summary</button>
+      </div>
+      <div class="chat-input-wrapper">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Type a message...">
+        <button class="send-btn" onclick="sendMessage()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Agent Overlay -->
+  <div class="agent-overlay" id="agentOverlay" onclick="closeAgentPanel()"></div>
+
+  <!-- Agent Panel (Bottom Sheet) -->
+  <div class="agent-panel" id="agentPanel">
+    <div class="agent-handle"></div>
+    <div class="agent-header">
+      <div class="agent-header-left">
+        <h2>@Agent Assistant</h2>
+        <p>AI-powered clinical support</p>
+      </div>
+      <span class="coach-only-badge">Coach-Only</span>
+      <button class="close-btn" onclick="closeAgentPanel()">&times;</button>
+    </div>
+    <div class="agent-content" id="agentContent">
+      <div class="mode-tabs">
+        <button class="mode-tab" onclick="triggerAgent('diagnostic')">Diagnostic</button>
+        <button class="mode-tab" onclick="triggerAgent('summary')">Summary</button>
+      </div>
+      <div class="agent-placeholder">
+        <p>Select a mode above to get AI assistance based on the current conversation.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const chatInput = document.getElementById('chatInput');
+    const chatMessages = document.getElementById('chatMessages');
+    const agentContent = document.getElementById('agentContent');
+    const agentPanel = document.getElementById('agentPanel');
+    const agentOverlay = document.getElementById('agentOverlay');
+    const agentToggle = document.getElementById('agentToggle');
+
+    let currentMode = null;
+
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    function sendMessage() {
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      if (text.toLowerCase().includes('@agent diagnostic')) {
+        triggerAgent('diagnostic');
+        chatInput.value = '';
+        return;
+      }
+
+      if (text.toLowerCase().includes('@agent summary')) {
+        triggerAgent('summary');
+        chatInput.value = '';
+        return;
+      }
+
+      addMessage(text, 'coach');
+      chatInput.value = '';
+    }
+
+    function addMessage(text, type) {
+      const label = type === 'coach' ? 'You' : 'Patient';
+      const html = `
+        <div class="message ${type}">
+          <div class="message-label">${label}</div>
+          ${text}
+        </div>
+      `;
+      chatMessages.insertAdjacentHTML('beforeend', html);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function toggleAgentPanel() {
+      if (agentPanel.classList.contains('visible')) {
+        closeAgentPanel();
+      } else {
+        openAgentPanel();
+      }
+    }
+
+    function openAgentPanel() {
+      agentPanel.classList.add('visible');
+      agentOverlay.classList.add('visible');
+      agentToggle.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAgentPanel() {
+      agentPanel.classList.remove('visible');
+      agentOverlay.classList.remove('visible');
+      agentToggle.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function triggerAgent(mode) {
+      currentMode = mode;
+      openAgentPanel();
+
+      document.querySelectorAll('.mode-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.textContent.toLowerCase().includes(mode)) {
+          tab.classList.add('active');
+        }
+      });
+
+      agentContent.innerHTML = `
+        <div class="mode-tabs">
+          <button class="mode-tab ${mode === 'diagnostic' ? 'active' : ''}" onclick="triggerAgent('diagnostic')">Diagnostic</button>
+          <button class="mode-tab ${mode === 'summary' ? 'active' : ''}" onclick="triggerAgent('summary')">Summary</button>
+        </div>
+        <div class="loading">
+          <div class="loading-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      `;
+
+      setTimeout(() => {
+        if (mode === 'diagnostic') {
+          showDiagnosticResponse();
+        } else {
+          showSummaryResponse();
+        }
+      }, 1200);
+    }
+
+    function showDiagnosticResponse() {
+      agentContent.innerHTML = `
+        <div class="mode-tabs">
+          <button class="mode-tab active" onclick="triggerAgent('diagnostic')">Diagnostic</button>
+          <button class="mode-tab" onclick="triggerAgent('summary')">Summary</button>
+        </div>
+        <div class="agent-response">
+          <div class="agent-response-header">
+            DIAGNOSTIC PROTOCOL: Lower Back Pain
+          </div>
+          <div class="agent-response-body">
+            <h3>Assessment Checklist</h3>
+            <ul class="checklist">
+              <li>
+                <div class="checkbox" onclick="this.classList.toggle('checked')"></div>
+                Duration greater than 6 weeks?
+              </li>
+              <li>
+                <div class="checkbox checked" onclick="this.classList.toggle('checked')"></div>
+                Radiating pain below knee?
+              </li>
+              <li>
+                <div class="checkbox checked" onclick="this.classList.toggle('checked')"></div>
+                Numbness or tingling present?
+              </li>
+              <li>
+                <div class="checkbox" onclick="this.classList.toggle('checked')"></div>
+                Bladder or bowel changes?
+              </li>
+              <li>
+                <div class="checkbox" onclick="this.classList.toggle('checked')"></div>
+                Recent trauma or injury?
+              </li>
+              <li>
+                <div class="checkbox checked" onclick="this.classList.toggle('checked')"></div>
+                Worse with prolonged sitting?
+              </li>
+            </ul>
+
+            <div class="info-card red-flags">
+              <h4>Red Flags Requiring Escalation</h4>
+              <ul>
+                <li>Cauda equina syndrome symptoms</li>
+                <li>Progressive neurological deficit</li>
+                <li>Unexplained weight loss</li>
+              </ul>
+            </div>
+
+            <div class="info-card sources">
+              <h4>Sources</h4>
+              <div class="source-tags">
+                <span class="source-tag">Mayo Clinic</span>
+                <span class="source-tag">Walters Kluwer</span>
+                <span class="source-tag">AAFP</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function showSummaryResponse() {
+      agentContent.innerHTML = `
+        <div class="mode-tabs">
+          <button class="mode-tab" onclick="triggerAgent('diagnostic')">Diagnostic</button>
+          <button class="mode-tab active" onclick="triggerAgent('summary')">Summary</button>
+        </div>
+        <div class="agent-response">
+          <div class="agent-response-header">
+            CLINICAL SUMMARY
+          </div>
+          <div class="agent-response-body">
+            <div class="info-card patient-profile">
+              <h4>Patient Profile</h4>
+              <p>Sarah M., sedentary desk work, 3-day lower back pain with right-sided radiation to hip and leg tingling</p>
+            </div>
+
+            <div class="considerations">
+              <h4 style="font-size: 13px; color: #333; margin-bottom: 8px;">Likely Considerations</h4>
+              <ol>
+                <li>
+                  <strong>Lumbar strain/mechanical back pain</strong>
+                  <span class="likelihood">most common</span>
+                </li>
+                <li>
+                  <strong>Piriformis syndrome</strong>
+                  <span class="likelihood">right-sided, hip involvement</span>
+                </li>
+                <li>
+                  <strong>Early lumbar disc involvement</strong>
+                  <span class="likelihood">given leg tingling - monitor</span>
+                </li>
+              </ol>
+            </div>
+
+            <div class="info-card next-steps">
+              <h4>Suggested Next Steps</h4>
+              <ul>
+                <li>Confirm no red flag symptoms</li>
+                <li>Discuss workstation ergonomics</li>
+                <li>Recommend movement breaks</li>
+                <li>Consider PT referral if persists</li>
+                <li>Monitor leg tingling</li>
+              </ul>
+            </div>
+
+            <div class="info-card sources">
+              <h4>Sources</h4>
+              <div class="source-tags">
+                <span class="source-tag">LexisNexis</span>
+                <span class="source-tag">Mayo Clinic</span>
+                <span class="source-tag">UpToDate</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Touch handling for bottom sheet
+    let startY = 0;
+    let currentY = 0;
+
+    agentPanel.addEventListener('touchstart', (e) => {
+      if (e.target.closest('.agent-content')) return;
+      startY = e.touches[0].clientY;
+    });
+
+    agentPanel.addEventListener('touchmove', (e) => {
+      if (e.target.closest('.agent-content')) return;
+      currentY = e.touches[0].clientY;
+      const diff = currentY - startY;
+      if (diff > 0) {
+        agentPanel.style.transform = `translateY(${diff}px)`;
+      }
+    });
+
+    agentPanel.addEventListener('touchend', (e) => {
+      if (e.target.closest('.agent-content')) return;
+      const diff = currentY - startY;
+      agentPanel.style.transform = '';
+      if (diff > 100) {
+        closeAgentPanel();
+      }
+      startY = 0;
+      currentY = 0;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health Coach @Agent Prototype</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .header {
+      background: #1a73e8;
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .patient-badge {
+      background: rgba(255,255,255,0.2);
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 13px;
+    }
+
+    /* Main layout */
+    .main-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Chat panel */
+    .chat-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: white;
+      border-right: 1px solid #e0e0e0;
+    }
+
+    .chat-header {
+      padding: 16px;
+      border-bottom: 1px solid #e0e0e0;
+      background: #fafafa;
+    }
+
+    .chat-header h2 {
+      font-size: 14px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .chat-header p {
+      font-size: 12px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .message.patient {
+      background: #e3f2fd;
+      color: #1565c0;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+
+    .message.coach {
+      background: #1a73e8;
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      opacity: 0.7;
+    }
+
+    /* Chat input */
+    .chat-input-container {
+      padding: 16px;
+      border-top: 1px solid #e0e0e0;
+      background: #fafafa;
+    }
+
+    .chat-input-wrapper {
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid #ddd;
+      border-radius: 24px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .chat-input:focus {
+      border-color: #1a73e8;
+    }
+
+    .send-btn {
+      background: #1a73e8;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 24px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .send-btn:hover {
+      background: #1557b0;
+    }
+
+    /* Agent hint */
+    .agent-hint {
+      font-size: 11px;
+      color: #888;
+      margin-top: 8px;
+      padding-left: 16px;
+    }
+
+    .agent-hint code {
+      background: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    /* Agent panel */
+    .agent-panel {
+      width: 400px;
+      background: #faf5ff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .agent-header {
+      padding: 16px;
+      background: #7c3aed;
+      color: white;
+    }
+
+    .agent-header h2 {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .agent-header p {
+      font-size: 11px;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    .coach-only-badge {
+      background: rgba(255,255,255,0.2);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+    }
+
+    .agent-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .agent-placeholder {
+      color: #9ca3af;
+      font-size: 13px;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .agent-placeholder code {
+      background: #e9d5ff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #7c3aed;
+    }
+
+    /* Agent response card */
+    .agent-response {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e9d5ff;
+      overflow: hidden;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .agent-response-header {
+      background: #7c3aed;
+      color: white;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .agent-response-body {
+      padding: 16px;
+    }
+
+    .agent-response h3 {
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 12px;
+    }
+
+    .checklist {
+      list-style: none;
+      margin-bottom: 16px;
+    }
+
+    .checklist li {
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .checklist li:last-child {
+      border-bottom: none;
+    }
+
+    .checkbox {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .checkbox.checked {
+      background: #7c3aed;
+      border-color: #7c3aed;
+      position: relative;
+    }
+
+    .checkbox.checked::after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      top: 2px;
+      width: 4px;
+      height: 8px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .red-flags {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .red-flags h4 {
+      color: #dc2626;
+      font-size: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .red-flags ul {
+      margin-left: 20px;
+      font-size: 12px;
+      color: #7f1d1d;
+    }
+
+    .red-flags li {
+      margin: 4px 0;
+    }
+
+    .sources {
+      background: #f0fdf4;
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .sources h4 {
+      font-size: 11px;
+      color: #166534;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .source-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .source-tag {
+      background: #dcfce7;
+      color: #166534;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+    }
+
+    /* Summary specific styles */
+    .patient-profile {
+      background: #eff6ff;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .patient-profile h4 {
+      font-size: 12px;
+      color: #1e40af;
+      margin-bottom: 8px;
+    }
+
+    .patient-profile p {
+      font-size: 13px;
+      color: #1e3a8a;
+    }
+
+    .considerations {
+      margin-bottom: 16px;
+    }
+
+    .considerations h4 {
+      font-size: 12px;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .considerations ol {
+      margin-left: 20px;
+      font-size: 13px;
+    }
+
+    .considerations li {
+      margin: 6px 0;
+      color: #444;
+    }
+
+    .considerations .likelihood {
+      font-size: 11px;
+      color: #888;
+    }
+
+    .next-steps {
+      background: #fefce8;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .next-steps h4 {
+      font-size: 12px;
+      color: #854d0e;
+      margin-bottom: 8px;
+    }
+
+    .next-steps ul {
+      margin-left: 16px;
+      font-size: 13px;
+      color: #713f12;
+    }
+
+    .next-steps li {
+      margin: 4px 0;
+    }
+
+    /* Loading state */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .loading-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .loading-dots span {
+      width: 10px;
+      height: 10px;
+      background: #7c3aed;
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out;
+    }
+
+    .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+    .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+
+    /* Mode selector buttons */
+    .mode-buttons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .mode-btn {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #e9d5ff;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      color: #7c3aed;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .mode-btn:hover {
+      background: #faf5ff;
+      border-color: #7c3aed;
+    }
+
+    .mode-btn.active {
+      background: #7c3aed;
+      color: white;
+      border-color: #7c3aed;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Health Coach Dashboard</h1>
+    <span class="patient-badge">Active Session</span>
+  </div>
+
+  <div class="main-container">
+    <!-- Chat Panel -->
+    <div class="chat-panel">
+      <div class="chat-header">
+        <h2>Sarah M. - Back Pain Program</h2>
+        <p>Session started 10 minutes ago</p>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="message patient">
+          <div class="message-label">Patient</div>
+          Hi, I've been having this back pain for about 3 days now. It started after I was sitting at my desk for a long time.
+        </div>
+        <div class="message coach">
+          <div class="message-label">You</div>
+          Hi Sarah! I'm sorry to hear about your back pain. Can you tell me more about where exactly you feel the pain?
+        </div>
+        <div class="message patient">
+          <div class="message-label">Patient</div>
+          It's mostly in my lower back, on the right side. Sometimes it feels like it goes down into my hip area.
+        </div>
+        <div class="message coach">
+          <div class="message-label">You</div>
+          Thank you for that detail. Does the pain get worse when you're sitting or standing for long periods?
+        </div>
+        <div class="message patient">
+          <div class="message-label">Patient</div>
+          Yes, definitely worse when sitting. Standing and walking around actually helps a bit. Also, I noticed some tingling in my right leg yesterday.
+        </div>
+      </div>
+
+      <div class="chat-input-container">
+        <div class="chat-input-wrapper">
+          <input type="text" class="chat-input" id="chatInput" placeholder="Type a message or @agent for assistance...">
+          <button class="send-btn" onclick="sendMessage()">Send</button>
+        </div>
+        <p class="agent-hint">
+          Type <code>@agent diagnostic</code> or <code>@agent summary</code> for AI assistance (coach-only)
+        </p>
+      </div>
+    </div>
+
+    <!-- Agent Panel -->
+    <div class="agent-panel">
+      <div class="agent-header">
+        <h2>
+          @Agent Assistant
+          <span class="coach-only-badge">Coach-Only View</span>
+        </h2>
+        <p>AI-powered clinical decision support</p>
+      </div>
+
+      <div class="agent-content" id="agentContent">
+        <div class="mode-buttons">
+          <button class="mode-btn" onclick="triggerAgent('diagnostic')">
+            @agent diagnostic
+          </button>
+          <button class="mode-btn" onclick="triggerAgent('summary')">
+            @agent summary
+          </button>
+        </div>
+        <div class="agent-placeholder">
+          <p>No agent response yet.</p>
+          <p style="margin-top: 12px;">Type <code>@agent diagnostic</code> or <code>@agent summary</code> in the chat, or click a button above.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const chatInput = document.getElementById('chatInput');
+    const chatMessages = document.getElementById('chatMessages');
+    const agentContent = document.getElementById('agentContent');
+
+    // Handle enter key
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    });
+
+    function sendMessage() {
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      // Check for @agent commands
+      if (text.toLowerCase().includes('@agent diagnostic')) {
+        triggerAgent('diagnostic');
+        chatInput.value = '';
+        return;
+      }
+
+      if (text.toLowerCase().includes('@agent summary')) {
+        triggerAgent('summary');
+        chatInput.value = '';
+        return;
+      }
+
+      // Regular message
+      addMessage(text, 'coach');
+      chatInput.value = '';
+    }
+
+    function addMessage(text, type) {
+      const label = type === 'coach' ? 'You' : 'Patient';
+      const html = `
+        <div class="message ${type}">
+          <div class="message-label">${label}</div>
+          ${text}
+        </div>
+      `;
+      chatMessages.insertAdjacentHTML('beforeend', html);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function triggerAgent(mode) {
+      // Update button states
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent.includes(mode)) {
+          btn.classList.add('active');
+        }
+      });
+
+      // Show loading
+      agentContent.innerHTML = `
+        <div class="mode-buttons">
+          <button class="mode-btn ${mode === 'diagnostic' ? 'active' : ''}" onclick="triggerAgent('diagnostic')">
+            @agent diagnostic
+          </button>
+          <button class="mode-btn ${mode === 'summary' ? 'active' : ''}" onclick="triggerAgent('summary')">
+            @agent summary
+          </button>
+        </div>
+        <div class="loading">
+          <div class="loading-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      `;
+
+      // Simulate API delay
+      setTimeout(() => {
+        if (mode === 'diagnostic') {
+          showDiagnosticResponse();
+        } else {
+          showSummaryResponse();
+        }
+      }, 1500);
+    }
+
+    function showDiagnosticResponse() {
+      agentContent.innerHTML = `
+        <div class="mode-buttons">
+          <button class="mode-btn active" onclick="triggerAgent('diagnostic')">
+            @agent diagnostic
+          </button>
+          <button class="mode-btn" onclick="triggerAgent('summary')">
+            @agent summary
+          </button>
+        </div>
+        <div class="agent-response">
+          <div class="agent-response-header">
+            DIAGNOSTIC PROTOCOL: Lower Back Pain
+          </div>
+          <div class="agent-response-body">
+            <h3>Assessment Checklist</h3>
+            <ul class="checklist">
+              <li>
+                <div class="checkbox" onclick="this.classList.toggle('checked')"></div>
+                Duration greater than 6 weeks?
+              </li>
+              <li>
+                <div class="checkbox checked" onclick="this.classList.toggle('checked')"></div>
+                Radiating pain below knee?
+              </li>
+              <li>
+                <div class="checkbox checked" onclick="this.classList.toggle('checked')"></div>
+                Numbness or tingling present?
+              </li>
+              <li>
+                <div class="checkbox" onclick="this.classList.toggle('checked')"></div>
+                Bladder or bowel changes?
+              </li>
+              <li>
+                <div class="checkbox" onclick="this.classList.toggle('checked')"></div>
+                Recent trauma or injury?
+              </li>
+              <li>
+                <div class="checkbox" onclick="this.classList.toggle('checked')"></div>
+                Night pain waking from sleep?
+              </li>
+              <li>
+                <div class="checkbox checked" onclick="this.classList.toggle('checked')"></div>
+                Worse with prolonged sitting?
+              </li>
+            </ul>
+
+            <div class="red-flags">
+              <h4>Red Flags Requiring Escalation</h4>
+              <ul>
+                <li>Cauda equina syndrome symptoms</li>
+                <li>Progressive neurological deficit</li>
+                <li>Unexplained weight loss</li>
+                <li>History of cancer</li>
+              </ul>
+            </div>
+
+            <div class="sources">
+              <h4>Sources</h4>
+              <div class="source-tags">
+                <span class="source-tag">Mayo Clinic</span>
+                <span class="source-tag">Walters Kluwer</span>
+                <span class="source-tag">AAFP Guidelines</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function showSummaryResponse() {
+      agentContent.innerHTML = `
+        <div class="mode-buttons">
+          <button class="mode-btn" onclick="triggerAgent('diagnostic')">
+            @agent diagnostic
+          </button>
+          <button class="mode-btn active" onclick="triggerAgent('summary')">
+            @agent summary
+          </button>
+        </div>
+        <div class="agent-response">
+          <div class="agent-response-header">
+            CLINICAL SUMMARY
+          </div>
+          <div class="agent-response-body">
+            <div class="patient-profile">
+              <h4>Patient Profile</h4>
+              <p>Sarah M., sedentary desk work, 3-day lower back pain with right-sided radiation to hip and leg tingling</p>
+            </div>
+
+            <div class="considerations">
+              <h4>Likely Considerations</h4>
+              <ol>
+                <li>
+                  <strong>Lumbar strain/mechanical back pain</strong>
+                  <span class="likelihood">(most common)</span>
+                </li>
+                <li>
+                  <strong>Piriformis syndrome</strong>
+                  <span class="likelihood">(right-sided, hip involvement)</span>
+                </li>
+                <li>
+                  <strong>Early lumbar disc involvement</strong>
+                  <span class="likelihood">(given leg tingling - monitor)</span>
+                </li>
+              </ol>
+            </div>
+
+            <div class="next-steps">
+              <h4>Suggested Next Steps</h4>
+              <ul>
+                <li>Confirm no red flag symptoms present</li>
+                <li>Discuss workstation ergonomics assessment</li>
+                <li>Recommend movement breaks every 30-45 min</li>
+                <li>Consider referral to PT if symptoms persist beyond 2 weeks</li>
+                <li>Monitor leg tingling - escalate if worsening</li>
+              </ul>
+            </div>
+
+            <div class="sources">
+              <h4>Sources</h4>
+              <div class="source-tags">
+                <span class="source-tag">LexisNexis</span>
+                <span class="source-tag">Mayo Clinic</span>
+                <span class="source-tag">UpToDate</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
