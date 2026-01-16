@@ -533,7 +533,7 @@
           <button class="send-btn" onclick="sendMessage()">Send</button>
         </div>
         <p class="agent-hint">
-          Type <code>@agent diagnostic</code> or <code>@agent summary</code> for AI assistance (coach-only)
+          Type <code>@agent diagnosis</code> or <code>@agent summary</code> for AI assistance (coach-only)
         </p>
       </div>
     </div>
@@ -550,8 +550,8 @@
 
       <div class="agent-content" id="agentContent">
         <div class="mode-buttons">
-          <button class="mode-btn" onclick="triggerAgent('diagnostic')">
-            @agent diagnostic
+          <button class="mode-btn" onclick="triggerAgent('diagnosis')">
+            @agent diagnosis
           </button>
           <button class="mode-btn" onclick="triggerAgent('summary')">
             @agent summary
@@ -559,7 +559,7 @@
         </div>
         <div class="agent-placeholder">
           <p>No agent response yet.</p>
-          <p style="margin-top: 12px;">Type <code>@agent diagnostic</code> or <code>@agent summary</code> in the chat, or click a button above.</p>
+          <p style="margin-top: 12px;">Type <code>@agent diagnosis</code> or <code>@agent summary</code> in the chat, or click a button above.</p>
         </div>
       </div>
     </div>
@@ -582,8 +582,8 @@
       if (!text) return;
 
       // Check for @agent commands
-      if (text.toLowerCase().includes('@agent diagnostic')) {
-        triggerAgent('diagnostic');
+      if (text.toLowerCase().includes('@agent diagnosis')) {
+        triggerAgent('diagnosis');
         chatInput.value = '';
         return;
       }
@@ -623,8 +623,8 @@
       // Show loading
       agentContent.innerHTML = `
         <div class="mode-buttons">
-          <button class="mode-btn ${mode === 'diagnostic' ? 'active' : ''}" onclick="triggerAgent('diagnostic')">
-            @agent diagnostic
+          <button class="mode-btn ${mode === 'diagnosis' ? 'active' : ''}" onclick="triggerAgent('diagnosis')">
+            @agent diagnosis
           </button>
           <button class="mode-btn ${mode === 'summary' ? 'active' : ''}" onclick="triggerAgent('summary')">
             @agent summary
@@ -641,7 +641,7 @@
 
       // Simulate API delay
       setTimeout(() => {
-        if (mode === 'diagnostic') {
+        if (mode === 'diagnosis') {
           showDiagnosticResponse();
         } else {
           showSummaryResponse();
@@ -652,8 +652,8 @@
     function showDiagnosticResponse() {
       agentContent.innerHTML = `
         <div class="mode-buttons">
-          <button class="mode-btn active" onclick="triggerAgent('diagnostic')">
-            @agent diagnostic
+          <button class="mode-btn active" onclick="triggerAgent('diagnosis')">
+            @agent diagnosis
           </button>
           <button class="mode-btn" onclick="triggerAgent('summary')">
             @agent summary
@@ -722,8 +722,8 @@
     function showSummaryResponse() {
       agentContent.innerHTML = `
         <div class="mode-buttons">
-          <button class="mode-btn" onclick="triggerAgent('diagnostic')">
-            @agent diagnostic
+          <button class="mode-btn" onclick="triggerAgent('diagnosis')">
+            @agent diagnosis
           </button>
           <button class="mode-btn active" onclick="triggerAgent('summary')">
             @agent summary
