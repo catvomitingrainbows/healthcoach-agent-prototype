@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#e57373"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4caf50"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="bold" fill="#333">Health Coach Agent - Technical Architecture</text>
+
+  <!-- Row 1: UI Layer -->
+  <rect x="30" y="60" width="170" height="120" rx="8" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+  <text x="115" y="85" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" fill="#1565c0">Health Coach UI</text>
+
+  <rect x="45" y="95" width="140" height="30" rx="5" fill="#fff" stroke="#64b5f6" stroke-width="1.5"/>
+  <text x="115" y="115" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#333">Chat Window</text>
+
+  <rect x="45" y="135" width="140" height="30" rx="5" fill="#bbdefb" stroke="#1976d2" stroke-width="2"/>
+  <text x="115" y="155" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#0d47a1">@agent trigger</text>
+
+  <!-- Row 1: Orchestration Layer -->
+  <rect x="230" y="60" width="280" height="120" rx="8" fill="#fff8e1" stroke="#ffa000" stroke-width="2"/>
+  <text x="370" y="85" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" fill="#e65100">Agent Orchestration</text>
+
+  <rect x="245" y="100" width="100" height="35" rx="5" fill="#fff" stroke="#ffb74d" stroke-width="1.5"/>
+  <text x="295" y="122" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#333">Context Parser</text>
+
+  <rect x="355" y="100" width="100" height="35" rx="5" fill="#ffe082" stroke="#ffa000" stroke-width="2"/>
+  <text x="405" y="122" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" fill="#333">Coach Agent</text>
+
+  <rect x="265" y="145" width="80" height="28" rx="5" fill="#fff" stroke="#ffb74d" stroke-width="1.5"/>
+  <text x="305" y="163" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#333">Diagnosis</text>
+
+  <rect x="355" y="145" width="80" height="28" rx="5" fill="#fff" stroke="#ffb74d" stroke-width="1.5"/>
+  <text x="395" y="163" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#333">Summary</text>
+
+  <!-- Row 1: MCP Servers -->
+  <rect x="540" y="60" width="330" height="120" rx="8" fill="#e8f5e9" stroke="#43a047" stroke-width="2"/>
+  <text x="705" y="85" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" fill="#2e7d32">MCP Server Connections</text>
+
+  <rect x="555" y="100" width="95" height="45" rx="5" fill="#fff" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="602" y="120" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" fill="#333">LexisNexis</text>
+  <text x="602" y="135" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#666">Legal/Medical</text>
+
+  <rect x="660" y="100" width="95" height="45" rx="5" fill="#fff" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="707" y="120" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" fill="#333">Wolters Kluwer</text>
+  <text x="707" y="135" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#666">Clinical Support</text>
+
+  <rect x="765" y="100" width="95" height="45" rx="5" fill="#fff" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="812" y="120" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" fill="#333">Mayo Clinic</text>
+  <text x="812" y="135" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#666">Education</text>
+
+  <!-- Row 1 Arrows -->
+  <line x1="200" y1="150" x2="230" y2="150" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="345" y1="117" x2="355" y2="117" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="455" y1="117" x2="540" y2="117" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Row 2: Verification Layer -->
+  <rect x="230" y="220" width="450" height="140" rx="8" fill="#fce4ec" stroke="#d81b60" stroke-width="2"/>
+  <text x="455" y="245" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" fill="#ad1457">Verification Layer</text>
+
+  <rect x="255" y="265" width="110" height="40" rx="5" fill="#fff" stroke="#f48fb1" stroke-width="1.5"/>
+  <text x="310" y="282" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#333">Response</text>
+  <text x="310" y="296" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#333">Aggregator</text>
+
+  <rect x="400" y="265" width="110" height="40" rx="5" fill="#f8bbd9" stroke="#d81b60" stroke-width="2"/>
+  <text x="455" y="282" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" fill="#333">Verification</text>
+  <text x="455" y="296" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" fill="#333">Agent</text>
+
+  <!-- Pass/Fail diamond -->
+  <polygon points="455,330 485,350 455,370 425,350" fill="#fff" stroke="#d81b60" stroke-width="2"/>
+  <text x="455" y="354" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#333">Pass?</text>
+
+  <rect x="540" y="330" width="110" height="35" rx="5" fill="#c8e6c9" stroke="#4caf50" stroke-width="1.5"/>
+  <text x="595" y="352" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#333">Format + Sources</text>
+
+  <rect x="290" y="330" width="90" height="35" rx="5" fill="#ffcdd2" stroke="#e57373" stroke-width="1.5"/>
+  <text x="335" y="352" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#c62828">Flag Review</text>
+
+  <!-- Verification arrows -->
+  <line x1="365" y1="285" x2="400" y2="285" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="455" y1="305" x2="455" y2="330" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="485" y1="350" x2="540" y2="350" stroke="#4caf50" stroke-width="2" marker-end="url(#arrow-green)"/>
+  <text x="510" y="342" font-family="system-ui, sans-serif" font-size="9" fill="#4caf50">Yes</text>
+  <line x1="425" y1="350" x2="380" y2="350" stroke="#e57373" stroke-width="2" marker-end="url(#arrow-red)"/>
+  <text x="400" y="342" font-family="system-ui, sans-serif" font-size="9" fill="#e57373">No</text>
+
+  <!-- MCP to Verification arrow -->
+  <path d="M 705 155 L 705 200 L 310 200 L 310 265" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- Row 3: Output -->
+  <rect x="30" y="420" width="170" height="80" rx="8" fill="#c8e6c9" stroke="#43a047" stroke-width="2"/>
+  <text x="115" y="450" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" fill="#2e7d32">Return to Coach</text>
+  <text x="115" y="470" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#333">Private View Only</text>
+
+  <!-- Output arrows -->
+  <path d="M 595 365 L 595 450 L 200 450" stroke="#4caf50" stroke-width="2" fill="none" marker-end="url(#arrow-green)"/>
+  <path d="M 335 365 L 335 430 L 200 430" stroke="#e57373" stroke-width="2" fill="none" stroke-dasharray="5,3" marker-end="url(#arrow-red)"/>
+
+  <!-- Legend -->
+  <rect x="700" y="420" width="170" height="100" rx="5" fill="#fafafa" stroke="#ccc" stroke-width="1"/>
+  <text x="785" y="440" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" fill="#333">Legend</text>
+
+  <line x1="715" y1="458" x2="745" y2="458" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="755" y="461" font-family="system-ui, sans-serif" font-size="9" fill="#333">Data flow</text>
+
+  <line x1="715" y1="478" x2="745" y2="478" stroke="#4caf50" stroke-width="2" marker-end="url(#arrow-green)"/>
+  <text x="755" y="481" font-family="system-ui, sans-serif" font-size="9" fill="#333">Approved response</text>
+
+  <line x1="715" y1="498" x2="745" y2="498" stroke="#e57373" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrow-red)"/>
+  <text x="755" y="501" font-family="system-ui, sans-serif" font-size="9" fill="#333">Flagged for review</text>
+</svg>

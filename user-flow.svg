@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 550">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4caf50"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="35" text-anchor="middle" font-family="system-ui, sans-serif" font-size="20" font-weight="bold" fill="#333">Health Coach @Agent User Flow</text>
+  <text x="450" y="55" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#666">Agent responses are visible only to the health coach, not the patient</text>
+
+  <!-- Background regions -->
+  <rect x="20" y="75" width="200" height="300" rx="10" fill="#e8f4f8" stroke="#b3d9e6" stroke-width="2"/>
+  <rect x="250" y="75" width="200" height="300" rx="10" fill="#fff3e0" stroke="#ffcc80" stroke-width="2"/>
+  <rect x="480" y="75" width="200" height="300" rx="10" fill="#f3e5f5" stroke="#ce93d8" stroke-width="2"/>
+  <rect x="710" y="75" width="170" height="300" rx="10" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="2"/>
+
+  <!-- Region labels -->
+  <text x="120" y="100" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="bold" fill="#0277bd">Patient Experience</text>
+  <text x="350" y="100" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="bold" fill="#ef6c00">Health Coach Interface</text>
+  <text x="580" y="100" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="bold" fill="#7b1fa2">Agent Response</text>
+  <text x="795" y="100" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="bold" fill="#2e7d32">Output</text>
+
+  <!-- Patient flow boxes -->
+  <rect x="40" y="125" width="160" height="40" rx="5" fill="#fff" stroke="#0288d1" stroke-width="2"/>
+  <text x="120" y="150" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#333">Patient Opens Chat</text>
+
+  <rect x="40" y="190" width="160" height="40" rx="5" fill="#fff" stroke="#0288d1" stroke-width="2"/>
+  <text x="120" y="215" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#333">Intake Questionnaire</text>
+
+  <rect x="40" y="255" width="160" height="60" rx="5" fill="#fff" stroke="#0288d1" stroke-width="2"/>
+  <text x="120" y="277" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#333">Topic: Back Pain</text>
+  <text x="120" y="293" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#333">Duration: 3 days</text>
+  <text x="120" y="309" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#666">Symptoms...</text>
+
+  <!-- Patient flow arrows -->
+  <line x1="120" y1="165" x2="120" y2="190" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="120" y1="230" x2="120" y2="255" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Arrow from patient to coach -->
+  <line x1="200" y1="285" x2="250" y2="285" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Coach flow boxes -->
+  <rect x="270" y="125" width="160" height="40" rx="5" fill="#fff" stroke="#f57c00" stroke-width="2"/>
+  <text x="350" y="150" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#333">Coach Views Chat</text>
+
+  <!-- Decision diamond -->
+  <polygon points="350,195 400,225 350,255 300,225" fill="#fff" stroke="#f57c00" stroke-width="2"/>
+  <text x="350" y="222" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#333">Needs help?</text>
+
+  <rect x="270" y="280" width="160" height="40" rx="5" fill="#fff3e0" stroke="#f57c00" stroke-width="2"/>
+  <text x="350" y="305" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="bold" fill="#e65100">Type @agent</text>
+
+  <!-- Coach flow arrows -->
+  <line x1="350" y1="165" x2="350" y2="195" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="350" y1="255" x2="350" y2="280" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="360" y="270" font-family="system-ui, sans-serif" font-size="10" fill="#666">Yes</text>
+
+  <!-- Arrow from coach to agent -->
+  <line x1="430" y1="300" x2="480" y2="300" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Agent response boxes -->
+  <rect x="500" y="125" width="160" height="55" rx="5" fill="#fff" stroke="#9c27b0" stroke-width="2"/>
+  <text x="580" y="147" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#7b1fa2">@agent diagnosis</text>
+  <text x="580" y="163" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#333">Clinical decision tree</text>
+
+  <rect x="500" y="200" width="160" height="55" rx="5" fill="#fff" stroke="#9c27b0" stroke-width="2"/>
+  <text x="580" y="222" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#7b1fa2">@agent summary</text>
+  <text x="580" y="238" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#333">Potential conditions</text>
+
+  <rect x="500" y="280" width="160" height="40" rx="5" fill="#e1bee7" stroke="#9c27b0" stroke-width="2"/>
+  <text x="580" y="305" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#333">Sources Attached</text>
+
+  <!-- Agent internal arrows -->
+  <line x1="580" y1="180" x2="580" y2="200" stroke="#666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="580" y1="255" x2="580" y2="280" stroke="#666" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+  <!-- Arrow from agent to output -->
+  <line x1="660" y1="300" x2="710" y2="300" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Output boxes -->
+  <rect x="725" y="125" width="140" height="55" rx="5" fill="#fff" stroke="#4caf50" stroke-width="2"/>
+  <text x="795" y="147" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#2e7d32">Coach Reviews</text>
+  <text x="795" y="163" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#333">Private view only</text>
+
+  <rect x="725" y="200" width="140" height="55" rx="5" fill="#c8e6c9" stroke="#4caf50" stroke-width="2"/>
+  <text x="795" y="222" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="bold" fill="#2e7d32">Coach Responds</text>
+  <text x="795" y="238" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#333">To patient</text>
+
+  <!-- Output internal arrow -->
+  <line x1="795" y1="180" x2="795" y2="200" stroke="#4caf50" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+
+  <!-- Return arrow (green, goes back to patient) -->
+  <path d="M 795 255 L 795 340 L 120 340 L 120 315" stroke="#4caf50" stroke-width="2" fill="none" marker-end="url(#arrowhead-green)"/>
+  <text x="450" y="355" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#4caf50">Conversation continues</text>
+
+  <!-- Coach-only badge -->
+  <rect x="495" y="335" width="170" height="24" rx="12" fill="#f3e5f5" stroke="#ce93d8" stroke-width="1"/>
+  <text x="580" y="351" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#7b1fa2">Coach-Only View</text>
+
+  <!-- Legend -->
+  <rect x="20" y="420" width="180" height="70" rx="5" fill="#fafafa" stroke="#ddd" stroke-width="1"/>
+  <text x="30" y="440" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" fill="#333">Legend</text>
+  <line x1="30" y1="455" x2="60" y2="455" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="70" y="458" font-family="system-ui, sans-serif" font-size="10" fill="#333">Flow direction</text>
+  <line x1="30" y1="475" x2="60" y2="475" stroke="#4caf50" stroke-width="2" marker-end="url(#arrowhead-green)"/>
+  <text x="70" y="478" font-family="system-ui, sans-serif" font-size="10" fill="#333">Response to patient</text>
+</svg>
